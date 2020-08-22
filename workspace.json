@@ -1,7 +1,70 @@
 {
   "version": 1,
-  "projects": {},
+  "projects": {
+    "upload-api": {
+      "root": "apps/upload-api",
+      "sourceRoot": "apps/upload-api/src",
+      "projectType": "application",
+      "prefix": "upload-api",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/upload-api",
+            "main": "apps/upload-api/src/main.ts",
+            "tsConfig": "apps/upload-api/tsconfig.app.json",
+            "assets": [
+              "apps/upload-api/src/assets"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/upload-api/src/environments/environment.ts",
+                  "with": "apps/upload-api/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "upload-api:build"
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "tsConfig": [
+              "apps/upload-api/tsconfig.app.json",
+              "apps/upload-api/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/upload-api/**/*"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/upload-api/jest.config.js",
+            "tsConfig": "apps/upload-api/tsconfig.spec.json",
+            "passWithNoTests": true
+          }
+        }
+      }
+    }
+  },
   "cli": {
-    "defaultCollection": "@nrwl/workspace"
-  }
+    "defaultCollection": "@nrwl/node"
+  },
+  "defaultProject": "upload-api"
 }
