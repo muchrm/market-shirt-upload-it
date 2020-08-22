@@ -29,19 +29,10 @@ async function uploadImage(page: Page, urlToCopy: string, newImageOption: ImageO
 
     await page.click('input#submit-work');
 
-    const text = 'Share your work'
+    // await page.waitForResponse(response => response.url() === `${webUrl}/portfolio/images` && response.status() === 302, { timeout: 120000 });
+    await page.waitForNavigation({timeout:120000});
 
-    try {
-        await page.waitForFunction(
-            text => document.querySelector('body').innerText.includes(text),
-            text,
-            { timeout: 120000 },
-
-        );
-    } catch (e) {
-        console.log(`The text "${text}" was not found on the page`);
-    }
-    console.debug('upload complete');
+    console.log('upload complete');
 }
 
 
@@ -57,29 +48,29 @@ async function uploadImage(page: Page, urlToCopy: string, newImageOption: ImageO
 
 
     const worksheet = workbook.getWorksheet(1);
-    const oploadItem:ImageOption[] = [];
+    const uploadItem: ImageOption[] = [];
     worksheet.eachRow(function (row, rowNumber) {
-        if(rowNumber != 1 && row.getCell(6).value != 'success'){
-            oploadItem.push({
-                imageToCpy:`${row.getCell(1).value}`,
-                image:`${row.getCell(2).value}`,
-                title:`${row.getCell(3).value}`,
+        // if(rowNumber != 1 && row.getCell(6).value != 'success'){
+        if (rowNumber != 1) {
+            uploadItem.push({
+                imageToCpy: `${row.getCell(1).value}`,
+                image: `${row.getCell(2).value}`,
+                title: `${row.getCell(3).value}`,
                 description: `${row.getCell(4).value}`,
-                tags:`${row.getCell(5).value}`,
+                tags: `${row.getCell(5).value}`,
             });
             row.getCell(6).value = 'success';
             row.commit();
         }
     });
-    console.log(oploadItem);
-    for (const item of oploadItem) {
-        await uploadImage(page,item.imageToCpy,item);
+    console.log(uploadItem);
+    for (const item of uploadItem) {
+        await uploadImage(page, item.imageToCpy, item);
     }
 
 
     // Create pages, interact with UI elements, assert values
-      await browser.close();
-      await workbook.xlsx.writeFile('data.xlsx');
-      process.exit(0);
+    await browser.close();
+    await workbook.xlsx.writeFile('data.xlsx');
 })();
 

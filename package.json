@@ -23,7 +23,8 @@
     "update": "nx migrate latest",
     "workspace-schematic": "nx workspace-schematic",
     "dep-graph": "nx dep-graph",
-    "help": "nx help"
+    "help": "nx help",
+    "pkg": "nx run upload-api:build && pkg dist/apps/upload-api/main.js --out-path dist/pkg"
   },
   "private": true,
   "dependencies": {
