@@ -50,8 +50,8 @@ async function uploadImage(page: Page, urlToCopy: string, newImageOption: ImageO
     const worksheet = workbook.getWorksheet(1);
     const uploadItem: ImageOption[] = [];
     worksheet.eachRow(function (row, rowNumber) {
-        // if(rowNumber != 1 && row.getCell(6).value != 'success'){
-        if (rowNumber != 1) {
+        if(rowNumber != 1 && row.getCell(6).value != 'success'){
+        // if (rowNumber != 1) {
             uploadItem.push({
                 imageToCpy: `${row.getCell(1).value}`,
                 image: `${row.getCell(2).value}`,
